@@ -82,32 +82,148 @@ if(!home||!away){
 alert('Entre les deux équipes.');
 return;
 }
-const card=document.createElement('div');
-card.className='card';
-const title=document.createElement('h2');
-title.textContent=home+' vs '+away;
-card.appendChild(title);
-[
-'Compétition : '+(get('league')||'Non précisée'),
-'Score principal : '+(get('s1')||'À analyser'),
-'Score offensif 1 : '+(get('s2')||'À analyser'),
-'Score offensif 2 : '+(get('s3')||'À analyser'),
-'Double chance : '+get('dc'),
-'Corners : '+(get('corners')||'À analyser'),
-'Notes : '+(get('analysis')||'Aucune')
-].forEach(text=>{
-const p=document.createElement('p');
-p.textContent=text;
-card.appendChild(p);
-});
-const del=document.createElement('button');
-del.textContent='Supprimer';
-del.onclick=()=>card.remove();
-card.appendChild(del);
-document.getElementById('results').prepend(card);
-['home','away','league','s1','s2','s3','corners','analysis'].forEach(id=>document.getElementById(id).value='');
-document.getElementById('dc').selectedIndex=0;
-}
-</script>
+const card=document
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080808">
+  <title>ARON73 VIP PRONOS</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #080808;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      background: linear-gradient(135deg, #151515, #29200b);
+      border-bottom: 2px solid #d4af37;
+      padding: 25px 15px;
+      text-align: center;
+    }
+    h1 { color: #e5c34b; margin: 0; font-size: 27px; }
+    header p { color: #ddd; }
+    main { max-width: 700px; margin: auto; padding: 16px; }
+    .card {
+      background: #171717;
+      border: 1px solid #66531c;
+      border-radius: 12px;
+      padding: 18px;
+      margin: 16px 0;
+    }
+    h2 { color: #e5c34b; font-size: 20px; }
+    label { display: block; margin: 12px 0 6px; }
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 7px;
+      border: 1px solid #777;
+      background: #090909;
+      color: white;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 13px;
+      margin-top: 12px;
+      background: #d4af37;
+      color: #111;
+      font-weight: bold;
+      border: 0;
+      border-radius: 7px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .result { white-space: pre-wrap; line-height: 1.7; }
+    .muted { color: #bbb; font-size: 13px; }
+    footer { text-align: center; padding: 25px; color: #aaa; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ARON73 VIP PRONOS</h1>
+    <p>⚽ Analyse • Pronostics • Football</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Bienvenue !</h2>
+      <p>Retrouve tes analyses de matchs et prépare tes pronostics.</p>
+      <p class="muted">Les pronostics sont des estimations, jamais des résultats garantis.</p>
+    </section>
+
+    <section class="card">
+      <h2>⚽ Préparer une analyse</h2>
+      <label for="match">Match</label>
+      <input id="match" placeholder="Ex. Real Madrid - Barcelone">
+
+      <label for="competition">Compétition</label>
+      <input id="competition" placeholder="Ex. Liga">
+
+      <label for="forme">Forme des équipes</label>
+      <textarea id="forme" rows="3" placeholder="Derniers résultats, absents, statistiques..."></textarea>
+
+      <button onclick="generer()">Préparer mon analyse</button>
+    </section>
+
+    <section class="card" id="zoneResultat" hidden>
+      <h2>📊 Fiche de pronostic</h2>
+      <div id="resultat" class="result"></div>
+      <button onclick="copierAnalyse()">Copier la fiche</button>
+    </section>
+
+    <section class="card">
+      <h2>📌 Nos conseils</h2>
+      <p>• Vérifie les compositions officielles.</p>
+      <p>• Compare les statistiques récentes.</p>
+      <p>• Ne mise jamais de l'argent nécessaire aux dépenses essentielles.</p>
+    </section>
+  </main>
+
+  <footer>© 2026 ARON73 VIP PRONOS</footer>
+
+  <script>
+    function generer() {
+      const match = document.getElementById('match').value.trim();
+      const competition = document.getElementById('competition').value.trim();
+      const forme = document.getElementById('forme').value.trim();
+
+      if (!match) {
+        alert('Entre le nom du match avant de continuer.');
+        return;
+      }
+
+      const texte =
+        'ARON73 VIP PRONOS\n\n' +
+        'Match : ' + match + '\n' +
+        'Compétition : ' + (competition || 'Non précisée') + '\n\n' +
+        'Informations disponibles :\n' +
+        (forme || 'Aucune statistique ajoutée.') + '\n\n' +
+        'À vérifier avant tout pronostic :\n' +
+        '1. Forme récente\n' +
+        '2. Attaque, milieu et défense\n' +
+        '3. Corners et buts\n' +
+        '4. Absences et compositions\n\n' +
+        'Les données saisies ne suffisent pas à établir un pronostic fiable. ' +
+        'Fais vérifier les statistiques avant de choisir un pari.';
+
+      document.getElementById('resultat').textContent = texte;
+      document.getElementById('zoneResultat').hidden = false;
+    }
+
+    async function copierAnalyse() {
+      const texte = document.getElementById('resultat').textContent;
+      try {
+        await navigator.clipboard.writeText(texte);
+        alert('Fiche copiée !');
+      } catch (e) {
+        alert('Sélectionne le texte de la fiche pour le copier.');
+      }
+    }
+  </script>
 </body>
 </html>
+
