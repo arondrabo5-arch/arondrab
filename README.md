@@ -1,4 +1,10 @@
- arondrab
+<h2>⚽ Préparer une analyse</h2>
+
+<label for="match">Match</label>
+<input
+  id="match"
+  placeholder="Ex. Real Madrid - Barcelone"
+> arondrab
 <!DOCTYPE html>
 <html lang="fr">
 <head>
